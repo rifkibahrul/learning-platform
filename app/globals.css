@@ -108,6 +108,15 @@
     .form-btn {
         @apply bg-primary text-dark-100 hover:bg-primary/90 inline-flex min-h-14 w-full items-center justify-center rounded-md px-6 py-2 font-bold text-base !important;
     }
+
+    /* Upload Files */
+    .upload-btn {
+        @apply flex min-h-14 w-full items-center justify-center gap-1.5 rounded-md bg-dark-200;
+    }
+
+    .upload-filename {
+        @apply mt-1 text-center text-xs;
+    }
 }
 
 @layer utilities {

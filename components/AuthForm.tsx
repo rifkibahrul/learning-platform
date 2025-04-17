@@ -52,19 +52,20 @@ const AuthForm = <FormData extends FieldValues>({
         setShowPassword(!showPassword);
     };
 
-    // 1. Define default value react-hook-form with Zod validation
+    // Define default value react-hook-form with Zod validation
     const form: UseFormReturn<FormData> = useForm({
         resolver: zodResolver(schema),
         defaultValues: defaultValues as DefaultValues<FormData>,
     });
 
-    // 2. Form submission handler
+    // Form submission handler
     const handleSubmit: SubmitHandler<FormData> = async (data) => {
         // Do something with the form values.
     };
 
     return (
         <div className="flex flex-col gap-4">
+            
             {/* Check form Signup or Sigin text */}
             <h1 className="text-2xl font-semibold text-white">
                 {isSignin ? "Welcome back to BookHub" : "Create account"}
@@ -98,9 +99,13 @@ const AuthForm = <FormData extends FieldValues>({
                                     <FormControl>
                                         {/* Check input type for text or image */}
                                         {field.name === "studentCard" ? (
-                                            <ImageUpload />
+                                            <ImageUpload
+                                                onFileChange={field.onChange}
+                                            />
                                         ) : field.name === "password" ? (
                                             <div className="relative">
+
+                                                {/* Toogle show and hidden password */}
                                                 <Input
                                                     required
                                                     type={
