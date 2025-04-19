@@ -1,14 +1,18 @@
 import React, { ReactNode } from "react";
 import Header from "@/components/Header";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-const Layout = ({ children }: { children: ReactNode }) => {
+const Layout = async({ children }: { children: ReactNode }) => {
+    // Check if there is no active session then redirect to dashboard
+    const session = await auth();
+    if (!session) redirect("/sign-in");
+
     return (
         <main className="root-container">
             <div className="mx-auto max-w-7xl">
-                <Header/>
-                <div className="mt-20 pb-20">
-                    {children}
-                </div>
+                <Header session={session}/>
+                <div className="mt-20 pb-20">{children}</div>
             </div>
         </main>
     );

@@ -3,10 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import Image from "next/image";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import { Session } from "next-auth";
 
-const Header = () => {
+const Header = ({ session }: { session: Session }) => {
     const pathname = usePathname();
 
     return (
@@ -19,7 +21,7 @@ const Header = () => {
                     height={40}
                 />
             </Link>
-            
+
             <ul className="flex flex-row items-center gap-8">
                 <li className="">
                     <Link
@@ -32,6 +34,17 @@ const Header = () => {
                         )}
                     >
                         Library
+                    </Link>
+                </li>
+
+                <li>
+                    <Link href="/my-profile">
+                        <Avatar>
+                            <AvatarFallback className="bg-amber-200">
+                                {/* Call function to shorten user name */}
+                                {getInitials(session?.user?.name || "IN")}
+                            </AvatarFallback>
+                        </Avatar>
                     </Link>
                 </li>
             </ul>

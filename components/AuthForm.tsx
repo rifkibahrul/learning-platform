@@ -26,6 +26,8 @@ import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import ImageUpload from "./ImageUpload";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 // Generic props for dynamic form types
 interface Props<FormData extends FieldValues> {
@@ -41,6 +43,8 @@ const AuthForm = <FormData extends FieldValues>({
     defaultValues,
     onSubmit,
 }: Props<FormData>) => {
+    const router = useRouter();
+
     // Cek signin or signup
     const isSignin = type === "SIGN_IN"; // Toogle for different labels and form
 
@@ -60,12 +64,27 @@ const AuthForm = <FormData extends FieldValues>({
 
     // Form submission handler
     const handleSubmit: SubmitHandler<FormData> = async (data) => {
-        // Do something with the form values.
+        const result = await onSubmit(data);    // 🔁 Calls the `signUp()` function passed as a prop
+
+        if (result.success) {
+            toast({
+                title: "Success",
+                description: isSignin
+                    ? "You have successfully signed in."
+                    : "You have successfully signed up.",
+            });
+            router.push("/");
+        } else {
+            toast({
+                title: "Error",
+                description: result.error ?? "An error occurred",
+                variant: "destructive",
+            });
+        }
     };
 
     return (
         <div className="flex flex-col gap-4">
-            
             {/* Check form Signup or Sigin text */}
             <h1 className="text-2xl font-semibold text-white">
                 {isSignin ? "Welcome back to BookHub" : "Create account"}
@@ -79,7 +98,8 @@ const AuthForm = <FormData extends FieldValues>({
             {/* Shadcn Form wrapper */}
             <Form {...form}>
                 <form
-                    onSubmit={form.handleSubmit(onSubmit)}
+                    // Use internal handler to trigger toast + redirect 
+                    onSubmit={form.handleSubmit(handleSubmit)}
                     className="space-y-6 w-full"
                 >
                     {Object.keys(defaultValues).map((field) => (
@@ -104,7 +124,6 @@ const AuthForm = <FormData extends FieldValues>({
                                             />
                                         ) : field.name === "password" ? (
                                             <div className="relative">
-
                                                 {/* Toogle show and hidden password */}
                                                 <Input
                                                     required

@@ -1,7 +1,14 @@
+import { auth } from "@/auth";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
-const Layout = ({ children }: { children: ReactNode }) => {
+const Layout = async ({ children }: { children: ReactNode }) => {
+
+    // Check if there is an active session then redirect to dashboard
+    const session = await auth();
+    if (session) redirect("/");
+
     return (
         <main className="auth-container">
             {/* Form */}
@@ -19,7 +26,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                             BookHub
                         </h1>
                     </div>
-                    
+
                     {/* Renders page from folder sign-in/sign-up */}
                     <div className="">{children}</div>
                 </div>

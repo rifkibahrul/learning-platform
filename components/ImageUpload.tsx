@@ -18,7 +18,7 @@ const authenticator = async () => {
     try {
         // Call endpoint to get token, expire, and signature form server 
         const response = await fetch(
-            `${config.env.apiEndpoint}/api/auth/imagekit`
+            `${config.env.apiEndpoint}/api/imagekit`
         );
         if (!response.ok) {
             const errorText = await response.text();
