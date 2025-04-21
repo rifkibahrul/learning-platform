@@ -19,7 +19,7 @@ const ibmPlexSans = localFont({
             style: "normal",
         },
         {
-            path: "/fonts/IBMPlexSans-Semibold.ttf",
+            path: "/fonts/IBMPlexSans-SemiBold.ttf",
             weight: "600",
             style: "normal",
         },
