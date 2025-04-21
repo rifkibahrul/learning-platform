@@ -5,17 +5,28 @@ import { users } from "@/database/schema";
 import { eq } from "drizzle-orm";
 import { hash } from "bcryptjs";
 import { signIn } from "@/auth";
+import { headers } from "next/headers";
+import ratelimit from "../ratelimit";
+import { redirect } from "next/navigation";
 
 // Pick is used to select only the email and password params from AuthCredentials
 export const signInWithCredentials = async (
     params: Pick<AuthCredentials, "email" | "password">
 ) => {
     const { email, password } = params;
+    // Get current IP address
+    const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+    console.log("IP used for ratelimit:", ip);
+    const { success } = await ratelimit.limit(ip);
+    console.log(success);
+
+    if (!success) return redirect("/many-requests");
+
     try {
         const result = await signIn("credentials", {
             email,
             password,
-            redirect: false,    // Prevents auto navigation - handle manually in AuthForm
+            redirect: false, // Prevents auto navigation - handle manually in AuthForm
         });
 
         if (result?.error) {
@@ -31,6 +42,11 @@ export const signInWithCredentials = async (
 
 export const signUp = async (params: AuthCredentials) => {
     const { fullName, email, password, studentId, studentCard } = params;
+
+    // Get current IP address
+    const ip = (await headers()).get("x-forwarded-for") || "127.0.0.1";
+    const { success } = await ratelimit.limit(ip);
+    if (!success) return redirect("/many-requests");
 
     // Check if the user already exist
     const existingUser = await db
