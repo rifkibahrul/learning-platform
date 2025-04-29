@@ -117,6 +117,11 @@
     .upload-filename {
         @apply mt-1 text-center text-xs;
     }
+
+    /* Progress */
+    .progress {
+        @apply rounded-full bg-green-800 p-2 text-center font-ibm-plex-sans text-xs leading-relaxed font-bold text-light-100;
+    }
 }
 
 @layer utilities {

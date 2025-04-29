@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
-import ImageUpload from "./ImageUpload";
+import FileUpload from "./FileUpload";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
@@ -119,7 +119,12 @@ const AuthForm = <FormData extends FieldValues>({
                                     <FormControl>
                                         {/* Check input type for text or image */}
                                         {field.name === "studentCard" ? (
-                                            <ImageUpload
+                                            <FileUpload
+                                                type="image"
+                                                accept="image/*"
+                                                placeholder="Upload your ID Card"
+                                                folder="ids"
+                                                variant="dark"
                                                 onFileChange={field.onChange}
                                             />
                                         ) : field.name === "password" ? (
